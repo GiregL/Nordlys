@@ -11,4 +11,6 @@ public class ApplicationDbContext : DbContext
     {
     }
     
+    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<CurrencyConversion> CurrencyConversions { get; set; }
 }
