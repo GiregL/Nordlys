@@ -8,7 +8,7 @@ namespace Nordlys.Controllers;
 /// Currency controller
 /// </summary>
 [ApiController]
-[Route("currencies")]
+[Route("api/currencies")]
 public class CurrencyController : ControllerBase
 {
     private readonly ILogger<CurrencyController> _logger;
@@ -35,6 +35,7 @@ public class CurrencyController : ControllerBase
     /// Retrieve a currency by its id.
     /// </summary>
     [HttpGet]
+    [Route("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         _logger.LogDebug($"Called GetById with id : {id}");
@@ -46,5 +47,24 @@ public class CurrencyController : ControllerBase
         }
         
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Delete a currency by its id.
+    /// </summary>
+    /// <param name="id">Currency ID</param>
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        _logger.LogDebug($"Called Delete with id {id}");
+        var entity = await _applicationDb.Currencies.FindAsync(id);
+        if (entity == null)
+        {
+            return NotFound();
+        }
+
+        _applicationDb.Currencies.Remove(entity);
+        return Ok();
     }
 }
