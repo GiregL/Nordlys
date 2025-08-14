@@ -1,6 +1,7 @@
 ﻿package main
 
 import (
+	nordlys_api "nordlys_api/app"
 	"github.com/gofiber/fiber/v2"
 	"log"
 )
@@ -8,7 +9,8 @@ import (
 func main() {
 	app := fiber.New()
 
-	app.Static("/", "./public")
+	core := nordlys_api.Core{}
+	nordlys_api.InitRouter(&core, app)
 
 	log.Fatal(app.Listen(":3000"))
 }
