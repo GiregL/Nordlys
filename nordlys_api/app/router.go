@@ -1,4 +1,4 @@
-﻿package app
+package app
 
 import (
 	"nordlys_api/app/resources"
@@ -17,7 +17,24 @@ func InitRouter(core *Core, app *fiber.App) {
 	activationKeyGroup := group.Group("/activation-key")
 	InitActivationKeyRouter(core, app, activationKeyGroup)
 
+	// User management and login group
+	userGroup := group.Group("/user")
+	InitUserRouter(core, app, userGroup)
 
+}
+
+func InitUserRouter(core *Core, app *fiber.App, group fiber.Router) {
+	userResource := resources.UserResource{
+		DB:    core.Database,
+		Store: core.Store,
+	}
+
+	group.Get("/:id", userResource.GetUserById())
+	group.Patch("/:id", userResource.PatchUpdateUserById())
+	group.Delete("/:id", userResource.DeleteUserById())
+
+	group.Post("/login", userResource.PostLoginUser())
+	group.Post("/register", userResource.PostRegisterNewUser())
 }
 
 // InitActivationKeyRouter initializes the router part for the activation key resource management.
@@ -25,7 +42,7 @@ func InitActivationKeyRouter(core *Core, app *fiber.App, group fiber.Router) {
 	service := services.ActivationKeyServicesImpl{}
 
 	activationKeyResource := resources.ActivationKeyResource{
-		DB: core.Database,
+		DB:                    core.Database,
 		ActivationKeyServices: service,
 	}
 

@@ -1,7 +1,11 @@
 package app
 
-import "gorm.io/gorm"
+import (
+	"github.com/gofiber/fiber/v2/middleware/session"
+	"gorm.io/gorm"
+)
 
 type Core struct {
 	Database *gorm.DB
+	Store    *session.Store
 }

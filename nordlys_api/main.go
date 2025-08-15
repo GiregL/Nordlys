@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"log"
@@ -6,6 +6,7 @@ import (
 	"nordlys_api/app/resources"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,10 +22,14 @@ func main() {
 	}
 
 	// Database model migrations.
-	db.AutoMigrate(resources.User{}, resources.ActivationKey{})
+	err = db.AutoMigrate(resources.User{}, resources.ActivationKey{})
+	if err != nil {
+		log.Fatal("An error occured while migrating database: ", err.Error())
+	}
 
 	core := nordlys_api.Core{
 		Database: db,
+		Store:    session.New(),
 	}
 
 	nordlys_api.InitRouter(&core, app)
