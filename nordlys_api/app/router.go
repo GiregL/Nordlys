@@ -31,6 +31,7 @@ func InitActivationKeyRouter(core *Core, app *fiber.App, group fiber.Router) {
 
 	group.Get("/", activationKeyResource.GetAllActivationKey())
 	group.Post("/", activationKeyResource.PostCreateActivationKey())
+	group.Delete("/:id", activationKeyResource.DeleteActivationKey())
 }
 
 func defaultHandler(c *fiber.Ctx) error {
